@@ -22,7 +22,6 @@
     html,body{height:100%}
     body{
       min-height:100%;display:flex;align-items:center;justify-content:center;
-      overflow: hidden;
       background:
         radial-gradient(circle at 15% 12%, rgba(149,141,205,.22), transparent 24%),
         radial-gradient(circle at 85% 88%, rgba(149,141,205,.14), transparent 26%),
@@ -31,13 +30,12 @@
       color:var(--text);padding:12px;
     }
     .game{
-      width: 420px;
-      height: 850px;
+      width:min(100vw - 24px, 420px);
+      aspect-ratio:4/5;
+      max-height:min(100dvh - 24px, 900px);
       background:linear-gradient(180deg, rgba(40,34,92,.98), rgba(23,19,52,.98));
       border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);
       display:flex;flex-direction:column;position:relative;
-      transform: scale(min(1, min(calc((100vw - 24px) / 420), calc((100dvh - 24px) / 850))));
-      transform-origin: center;
     }
     .screen{display:none;height:100%}
     .screen.active{display:flex;flex-direction:column}
@@ -109,8 +107,7 @@
       content: '|';
       animation: blink 1s infinite;
     }
-    @keyframes blink { 50% { opacity: 0;
-    } }
+    @keyframes blink { 50% { opacity: 0; } }
 
     #play-icon {
       margin-top: 24px;
@@ -133,15 +130,13 @@
     }
 
     .top{
-      padding: 12px 16px 8px;
-      border-bottom: 1px solid var(--line);
+      padding: 12px 16px 8px; border-bottom: 1px solid var(--line);
       background: rgba(255,255,255,.03); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
     }
     .top-left{min-width:0}
     .eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);font-weight:700}
     .title{font-size:22px;line-height:1.02;font-weight:800;margin-top:6px}
-    .brand-logo{width: 59px; max-width: 17%;
-      height: auto; display: block; object-fit: contain; flex: 0 0 auto}
+    .brand-logo{width: 59px; max-width: 17%; height: auto; display: block; object-fit: contain; flex: 0 0 auto}
     .stage{padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;position:relative}
     .hero{
       flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.25fr .75fr;gap:10px;
@@ -182,7 +177,6 @@
     .thumb:hover,.thumb.active{transform:translateY(-1px);border-color:rgba(207,200,255,.48);box-shadow:0 8px 22px rgba(0,0,0,.18)}
     
     .navbtn{position:absolute;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(23,19,52,.96);color:#fff;cursor:pointer;font-size:14px;display:grid;place-items:center;z-index:5;pointer-events:auto}
-    
     .navbtn.left{left:4px}.navbtn.right{right:4px}
     .bottom{border-top:1px solid var(--line);padding:8px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:7px;background:rgba(0,0,0,.08)}
     .start-note{font-size:12px;line-height:1.35;color:var(--accent2);text-align:center;font-weight:700}
@@ -221,8 +215,7 @@
         box-sizing: border-box;
         overflow: hidden;
     }
-    @keyframes fadeIn { from { opacity: 0;
-    transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     
     .hint-img {
         width: 140px;
@@ -284,9 +277,63 @@
     .modal-image{aspect-ratio:1/1;border-radius:14px;border:1px dashed rgba(255,255,255,.18);background:linear-gradient(180deg, rgba(149,141,205,.12), rgba(149,141,205,.02));display:grid;place-items:center;color:var(--soft);font-size:11px;text-align:center;padding:12px;position:relative;overflow:hidden;}
     .modal-actions{display:flex;justify-content:flex-end;margin-top:10px}
     .close-btn{height:34px;padding:0 14px;border-radius:10px;border:1px solid rgba(207,200,255,.28);background:linear-gradient(180deg, rgba(149,141,205,.24), rgba(149,141,205,.16));color:#fff;font-size:11px;font-weight:800;cursor:pointer}
+
+    @media (max-width:380px){
+      .title{font-size:18px}.hero-copy h2{font-size:24px}.brand-logo{width:52px}.opt{font-size:10px}.hint-img{width:110px;height:110px;flex:0 0 110px}.hint-text{font-size:10px}
+    }
+
+    /* Botão X mobile — oculto por padrão, aparece só no mobile */
+    #mobile-close-btn {
+      display: none;
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 9999;
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 8px;
+      font-weight: 300;
+    }
+
+    /* MOBILE: modal centralizado, proporção 4/5 travada na altura da viewport */
+    @media (max-width: 768px) {
+      html {
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        background: #363163;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100dvh;
+        min-height: unset;
+        overflow: hidden;
+      }
+      .game {
+        /* trava na altura total da viewport, largura proporcional 4/5 */
+        height: 100dvh;
+        width: calc(100dvh * 4 / 5);
+        max-width: 100vw;
+        max-height: 100dvh;
+        aspect-ratio: unset;
+        flex-shrink: 0;
+      }
+      #mobile-close-btn {
+        display: block;
+        align-items: unset;
+      }
+    }
   </style>
 </head>
 <body>
+  <button id="mobile-close-btn" aria-label="Fechar" onclick="window.location.href='https://psiangelooliveira.com.br/modo-aviao/'">&#x2715;</button>
   <div class="game" id="game">
     <section class="screen active" id="screen-cover"></section>
 
@@ -298,7 +345,6 @@
         </div>
         <img class="brand-logo" src="https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Psicologo-Angelo-Oliveira-logo-CTA-CRP-04-80909.png" alt="Logo">
       </div>
-  
       <div class="stage">
         <div class="hero">
           <div class="hero-figure" id="heroFigure">
@@ -307,14 +353,12 @@
           <div class="hero-copy">
             <div>
               <div class="badge" id="heroBadge">Arquétipo 01</div>
-  
               <h2 id="heroTitle">Inocente</h2>
               <div class="desc" id="heroDesc">Acredita que o cliente vai voltar amanhã pra comprar o seguro que não quis hoje.</div>
             </div>
           </div>
           <div class="carousel-overlay">
             <button class="navbtn left" id="prevLoop" type="button">‹</button>
-        
             <div class="carousel-shell"><div class="carousel" id="carousel"></div></div>
             <button class="navbtn right" id="nextLoop" type="button">›</button>
           </div>
@@ -327,7 +371,6 @@
     </section>
 
     <section class="screen" id="screen-explanation">
-    
       <div class="exp-progress-container">
         <div class="exp-progress-bar" id="expProgressBar"></div>
       </div>
@@ -342,7 +385,6 @@
       </div>
     </section>
 
- 
     <section class="screen" id="screen-quiz">
       <div class="progress-area"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
       <div class="question-box">
@@ -350,16 +392,16 @@
             <div class="question" id="questionText"></div>
         </div>
         
+        <!-- RESPOSTAS AGORA NO TOPO/MEIO -->
         <div class="options" id="optionsBox"></div>
         
-        
+        <!-- DICA SEMPRE ABAIXO DAS RESPOSTAS -->
         <div class="hint-card" id="hintCard">
             <img class="hint-img" id="hintImg" src="" alt="Dica">
             <div class="hint-content">
                 <div class="hint-text" id="hintContentText"></div>
                 <div class="hint-source" id="hintSourceText"></div>
             </div>
-       
         </div>
 
         <div class="navline">
@@ -376,7 +418,6 @@
       <div class="result-wrap">
         <div class="result-title-box"><h3 id="resultTitle">Que pessoa coerente, hein</h3></div>
         
-    
         <div class="result-desc-box">
           <p id="resultText">Pelas suas respostas, você se enxerga bem próximo do que é.</p>
           <button class="ideal-link" id="idealBtn" type="button">Arquétipo ideal</button>
@@ -385,8 +426,7 @@
         <div class="result-main-info">
           <img class="result-image-v2" id="resultImgV2" src="" alt="Dica">
           <div class="result-side-cta">
-            <p>Gostou do quiz?
-Avalia quem fez, uai!</p>
+            <p>Gostou do quiz? Avalia quem fez, uai!</p>
             <a href="https://g.page/r/CT0vb5s-JIV1EAE/review" target="_blank" class="side-btn">Clique aqui</a>
           </div>
         </div>
@@ -395,7 +435,6 @@ Avalia quem fez, uai!</p>
           <button class="icon-btn" id="restartBtn" type="button" aria-label="Recomeçar">↻</button>
           <div class="disclaimer">Este quiz é uma brincadeira com humor e não substitui avaliação psicológica ou instrumento científico.</div>
           <button class="icon-btn" id="exitBtn" type="button" aria-label="Sair">✕</button>
- 
         </div>
       </div>
     </section>
@@ -410,12 +449,9 @@ Avalia quem fez, uai!</p>
 
     <div class="modal" id="alertModal">
       <div class="modal-card" style="text-align: center;">
-        <p id="alertMsg" style="font-size:14px;
-margin-bottom:20px; line-height:1.4;">Vai mesmo perder as informações bacanas do jogo, pulando o texto?</p>
-        <div id="alertTimer" style="font-size: 24px;
-font-weight: 800; display: none; margin-bottom:20px;">1:00</div>
-        <div class="modal-actions" style="justify-content: center;
-gap: 10px;" id="alertActions">
+        <p id="alertMsg" style="font-size:14px; margin-bottom:20px; line-height:1.4;">Vai mesmo perder as informações bacanas do jogo, pulando o texto?</p>
+        <div id="alertTimer" style="font-size: 24px; font-weight: 800; display: none; margin-bottom:20px;">1:00</div>
+        <div class="modal-actions" style="justify-content: center; gap: 10px;" id="alertActions">
           <button class="solid" id="alertNo">NÃO</button>
           <button class="solid" id="alertYes">SIM</button>
         </div>
@@ -427,21 +463,17 @@ gap: 10px;" id="alertActions">
     (() => {
       const archetypes = [
         { id:'inocente', num:'01', name:'Inocente', desc:'Acredita que o cliente vai voltar amanhã pra comprar o seguro que não quis hoje.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/1-Inocente-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-1-O-inocente.jpg' },
-        
         { id:'explorador', num:'02', name:'Explorador', desc:'Testa investimentos em sua própria carteira e ama um serviço novo pra vender.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/2-Explorador-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-2-O-explorador.jpg' },
         { id:'sabio', num:'03', name:'Sábio', desc:'Planeja tudo com cuidado mas abre exceção se ouvir do cliente a palavra BACEN.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/3-Sabio-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-3-O-sabio.jpg' },
         { id:'heroi', num:'04', name:'Herói', desc:'Todo mundo olha pra ele viajando 5x no ano e se inspira pra bater as metas.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/4-Heroi-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-4-O-heroi.jpg' },
-        { id:'rebelde', num:'05', name:'Rebelde', desc:'Não diz nem oi pro cliente que o chama do lado 
-de fora se a agência já fechou.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/5-Rebelde-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-5-O-rebelde.jpg' },
+        { id:'rebelde', num:'05', name:'Rebelde', desc:'Não diz nem oi pro cliente que o chama do lado de fora se a agência já fechou.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/5-Rebelde-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-5-O-rebelde.jpg' },
         { id:'amante', num:'06', name:'Amante', desc:'Envolve-se tanto com cliente que costuma receber presentes e mimos.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/6-Amante-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-6-O-amante.jpg' },
         { id:'divertido', num:'07', name:'Divertido', desc:'Diz pro cliente sorrindo que com nome no SPC só dá pra oferecer um cafezinho.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/7-Divertido-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-7-O-divertido.jpg' },
         { id:'cuidador', num:'08', name:'Cuidador', desc:'Pega no colo o bebê da cliente enquanto ela assina um contrato.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/8-Cuidador-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-8-O-cuidador.jpg' },
-        { id:'criador', num:'09', name:'Criador', 
-desc:'É o que faz questão de colocar um layout bonito até no aviso do banheiro.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/9-Criado-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-9-O-criador.jpg' },
+        { id:'criador', num:'09', name:'Criador', desc:'É o que faz questão de colocar um layout bonito até no aviso do banheiro.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/9-Criado-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-9-O-criador.jpg' },
         { id:'governante', num:'10', name:'Governante', desc:'Quando o BO fica grande demais, conduz o problema de modo exemplar.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/10-Governante-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-10-O-governante.jpg' },
         { id:'comum', num:'11', name:'Comum', desc:'Entra e sai no horário, almoça no horário e considera isso o básico.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/11-Comum-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-11-O-inocente.jpg' },
         { id:'mago', num:'12', name:'Mago', desc:'Reverte uma venda impossível e fecha com aquele cliente que recusa tudo.', thumb:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/12-Mago-thumb-game.png', img:'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Arquetipo-game-Psicologo-Angelo-Oliveira-CRP-04-80909-12-O-mago.jpg' }
-    
       ];
 
       const imgLinks = {
@@ -449,153 +481,120 @@ desc:'É o que faz questão de colocar um layout bonito até no aviso do banheir
         bowie: 'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Bowie-dica.jpg',
         abaddon: 'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/abaddon-dica.jpg'
       };
+
       const questions = [
         { 
-          txt:'Agência acaba de fechar e o cliente gesticula te chamando.
-Você:', 
-          hint: { img: imgLinks.eva, text: 'VOCÊ SABIA?
-Aqui tem 12 arquétipos mas Jung considerava que eles são infinitos.
-Esses 12 foram popularizados no livro O Herói e o Fora da Lei em 2002 por puro marketing.', source: 'Fonte: [O Herói e o Fora da Lei]' },
+          txt:'Agência acaba de fechar e o cliente gesticula te chamando. Você:', 
+          hint: { img: imgLinks.eva, text: 'VOCÊ SABIA? Aqui tem 12 arquétipos mas Jung considerava que eles são infinitos. Esses 12 foram popularizados no livro O Herói e o Fora da Lei em 2002 por puro marketing.', source: 'Fonte: [O Herói e o Fora da Lei]' },
           opts:[
             { t:'Não vê problema em atendê-lo e não faz drama.', pts:{ cuidador:2, amante:1 } },
             { t:'Pensa: “Sóe ele falar BACEN. Do contrário, não.”.', pts:{ sabio:2, governante:1 } },
-            
             { t:'Vai até ele sorridente e diz: Atendo sim. Amanhã.', pts:{ rebelde:2, governante:1 } },
             { t:'Gesticula de volta mostrando o relógio e dizendo não', pts:{ divertido:2, amante:1 } },
             { t:'Vê como oportunidade, pede pra aguardar e atende.', pts:{ heroi:2, mago:1 } }
           ]
         },
         { 
-        
-          txt:'O cliente diz que quem o atendeu antes era melhor que você.
-Sua reação', 
+          txt:'O cliente diz que quem o atendeu antes era melhor que você. Sua reação', 
           hint: { img: imgLinks.bowie, text: 'DIFERENÇA IMPORTANTE: O que Jung chama de inconsciente coletivo, a Teoria Cognitivo-Comportamental analisa como aprendido na infância via trauma ou repetição.', source: 'Fonte: [Terapia do Esquema (Jeffrey Young)]' },
           opts:[
             { t:'Ignora a fala e vai direto ao atendimento.', pts:{ sabio:2, comum:1 } },
-            { t:'Pergunta o que pode fazer para atendêlo 
-bem.', pts:{ amante:2, cuidador:1 } },
+            { t:'Pergunta o que pode fazer para atendêlo bem.', pts:{ amante:2, cuidador:1 } },
             { t:'Diz pra ele: Vamos consertar isso agora.', pts:{ heroi:2, mago:1 } },
             { t:'Vê a fala como um desafio e vê como provar o contrário.', pts:{ criador:2, explorador:1 } },
             { t:'Pergunta sorrindo se ele quer que outro atenda.', pts:{ divertido:2, rebelde:1 } }
           ]
-       
         },
         { 
-          txt:'O sistema caiu e é 5ª dia útil com fila enorme.
-Você:', 
-          hint: { img: imgLinks.abaddon, text: 'VEJA SÓ: O arquétipo do Herói, na TCC, é traduzido operacionalmente como Autoeficácia (Bandura).
-Ou seja, comportamento de quem foca para superar desafios.', source: 'Fonte: [Teoria Social Cognitiva (Albert Bandura)]' },
+          txt:'O sistema caiu e é 5ª dia útil com fila enorme. Você:', 
+          hint: { img: imgLinks.abaddon, text: 'VEJA SÓ: O arquétipo do Herói, na TCC, é traduzido operacionalmente como Autoeficácia (Bandura). Ou seja, comportamento de quem foca para superar desafios.', source: 'Fonte: [Teoria Social Cognitiva (Albert Bandura)]' },
           opts:[
             { t:'Faz o que dá e não se preocupa com o caos.', pts:{ comum:2, governante:1 } },
             { t:'Aproveita para resolver tarefas pendentes.', pts:{ heroi:2, governante:1 } },
-            { t:'Quebra o gelo dizendo que pelo menos tem luz ainda.', pts:{ 
-divertido:2, inocente:1 } },
+            { t:'Quebra o gelo dizendo que pelo menos tem luz ainda.', pts:{ divertido:2, inocente:1 } },
             { t:'Vai pra fila avisar e filtrar as prioridades', pts:{ criador:2, explorador:1 } },
             { t:'Vê oportunidade de explicar sobre o app do banco.', pts:{ cuidador:2, sabio:1 } }
           ]
         },
         { 
-          txt:'O cliente chega bravo sem explicar e solta: esse 
-banco não presta. Você:', 
-          hint: { img: imgLinks.eva, text: 'IMPORTANTE: Pra TCC, ter uma persona rígida demais pode virar ansiedade social;
-em falta, vira inadequação. O tratamento é ajustar a rigidez dessa máscara.', source: 'Fonte: [Manual de Terapia Cognitivo-Comportamental (Judith Beck)]' },
+          txt:'O cliente chega bravo sem explicar e solta: esse banco não presta. Você:', 
+          hint: { img: imgLinks.eva, text: 'IMPORTANTE: Pra TCC, ter uma persona rígida demais pode virar ansiedade social; em falta, vira inadequação. O tratamento é ajustar a rigidez dessa máscara.', source: 'Fonte: [Manual de Terapia Cognitivo-Comportamental (Judith Beck)]' },
           opts:[
             { t:'Escuta sem comprar a briga e tenta entendê-lo.', pts:{ cuidador:2, amante:1 } },
             { t:'Decide provar o contrárioe fazê-lo mudar de ideia.', pts:{ mago:2, heroi:1 } },
-            { t:'Faz questão de ouvi-lo e argumenta de 
-modo objetivo.', pts:{ sabio:2, governante:1 } },
+            { t:'Faz questão de ouvi-lo e argumenta de modo objetivo.', pts:{ sabio:2, governante:1 } },
             { t:'Pensa que ele pode ter razão mas não quer saber qual.', pts:{ rebelde:2, comum:1 } },
             { t:'Dá uma risada e responde com um absurdo maior.', pts:{ divertido:2, amante:1 } }
           ]
         },
         { 
-          txt:'Ao negar empréstimo 
-a um cliente negativado, ele reclama. Você:', 
-          hint: { img: imgLinks.bowie, text: 'ATENÇÃO: Lembre que ninguém é apenas um arquétipo e, sim, uma constelação deles.
-Por mais visível seja um deles, é só um dos nossos papéis na vida.', source: 'Fonte: [O Homem e seus Símbolos (C.G. Jung)]' },
+          txt:'Ao negar empréstimo a um cliente negativado, ele reclama. Você:', 
+          hint: { img: imgLinks.bowie, text: 'ATENÇÃO: Lembre que ninguém é apenas um arquétipo e, sim, uma constelação deles. Por mais visível seja um deles, é só um dos nossos papéis na vida.', source: 'Fonte: [O Homem e seus Símbolos (C.G. Jung)]' },
           opts:[
             { t:'Vê o interesse e sugere que peça outro pra tentar.', pts:{ explorador:2, criador:1 } },
             { t:'Explica como ele pode solucionar o caso com calma.', pts:{ sabio:2, governante:1 } },
-            { t:'Avisa 
-que ele pode ligar na central.', pts:{ amante:2, mago:1 } },
+            { t:'Avisa que ele pode ligar na central.', pts:{ amante:2, mago:1 } },
             { t:'Ouve o que ele diz e responde: reclama com o SPC ', pts:{ comum:2, rebelde:1 } },
             { t:'Sorri e diz: pelo histórico, só posso oferecer café.', pts:{ divertido:2, heroi:1 } }
           ]
         },
         { 
-        
-          txt:'O cliente resolve contar a vida inteira antes da dúvida.
-Você:', 
-          hint: { img: imgLinks.abaddon, text: 'VEJA SÓ: Digamos que pensamentos intrusivos não é coisa nova.
-Jung chama no contexto dos arquétipos de sombra. É o que você tem ou pensa mas não necessariamente faz.', source: 'Fonte: [Aion: Estudos sobre o simbolismo do Si-mesmo]' },
+          txt:'O cliente resolve contar a vida inteira antes da dúvida. Você:', 
+          hint: { img: imgLinks.abaddon, text: 'VEJA SÓ: Digamos que pensamentos intrusivos não é coisa nova. Jung chama no contexto dos arquétipos de sombra. É o que você tem ou pensa mas não necessariamente faz.', source: 'Fonte: [Aion: Estudos sobre o simbolismo do Si-mesmo]' },
           opts:[
             { t:'Acolhe sem mostrar as 17 abas e ouve com atenção.', pts:{ cuidador:2, inocente:1 } },
             { t:'Conduz com delicadeza e explica o que pode fazer.', pts:{ amante:2, sabio:1 } },
-         
             { t:'Corta caminho com educação e pede objetividade.', pts:{ governante:2, rebelde:1 } },
             { t:'Entra no clima e dá corda porque a história é boa.', pts:{ amante:2, cuidador:1 } },
             { t:'Pede que ele seja breve porque tem outros ali.', pts:{ sabio:2, comum:1 } }
           ]
         },
         { 
-    
-          txt:'Falta pouco pro fim do mês e sua meta tá longe do ideal.
-Você:', 
-          hint: { img: imgLinks.eva, text: 'FATO: Embora tenhamos vários, geralmente há um arquétipo regente em cada fase da vida que dita nossos valores principais.
-Os outros, geralmente, nos ajudam a navegar na realidade.', source: 'Fonte: [O Desenvolvimento da Personalidade (C.G. Jung)]' },
+          txt:'Falta pouco pro fim do mês e sua meta tá longe do ideal. Você:', 
+          hint: { img: imgLinks.eva, text: 'FATO: Embora tenhamos vários, geralmente há um arquétipo regente em cada fase da vida que dita nossos valores principais. Os outros, geralmente, nos ajudam a navegar na realidade.', source: 'Fonte: [O Desenvolvimento da Personalidade (C.G. Jung)]' },
           opts:[
             { t:'Senta e planeja o que fazer para alcanlá-la.', pts:{ heroi:2, mago:1 } },
             { t:'Mantém tudo como está porque é só uma meta.', pts:{ cuidador:2, inocente:1 } },
-            { t:'Planeja o mês seguinte porque este não se salva.', 
-pts:{ comum:2, governante:1 } },
+            { t:'Planeja o mês seguinte porque este não se salva.', pts:{ comum:2, governante:1 } },
             { t:'Cria mentalmente um autodesafio e executa.', pts:{ cuidador:2, heroi:1 } },
             { t:'Ignora horários e trabalha dobrado até conseguir.', pts:{ criador:2, mago:1 } }
           ]
         },
         { 
-          txt:'O cliente responde “vou pensar” pela 2ª vez consecutiva.
-Você:', 
-          hint: { img: imgLinks.bowie, text: 'CURIOSIDADE: Na TCC, entre o arquétipo e a sombra, há a persona.
-Seria tudo que você usa pra se adaptar a diferentes ambientes (trabalho, família) sem rejeição social.', source: 'Fonte: [O Eu e o Inconsciente (C.G. Jung)]' },
+          txt:'O cliente responde “vou pensar” pela 2ª vez consecutiva. Você:', 
+          hint: { img: imgLinks.bowie, text: 'CURIOSIDADE: Na TCC, entre o arquétipo e a sombra, há a persona. Seria tudo que você usa pra se adaptar a diferentes ambientes (trabalho, família) sem rejeição social.', source: 'Fonte: [O Eu e o Inconsciente (C.G. Jung)]' },
           opts:[
             { t:'Respeita o tempo e diz pra ele te procurar depois.', pts:{ inocente:2, amante:1 } },
             { t:'Tenta uma última virada certeira e busca convencê-lo.', pts:{ mago:2, heroi:1 } },
-            { 
-t:'Espera ele ir e planeja outa abordagem na próxima vez.', pts:{ criador:2, explorador:1 } },
+            { t:'Espera ele ir e planeja outa abordagem na próxima vez.', pts:{ criador:2, explorador:1 } },
             { t:'Anota mentalmente pra não atendê-lo mais.', pts:{ comum:2, governante:1 } },
             { t:'Brinca: Na próxima, tem música no Fantástico.', pts:{ divertido:2, amante:1 } }
           ]
         },
         { 
-          txt:'Um problema 
-pequeno começa a crescer por negligência de outro. Você:', 
-          hint: { img: imgLinks.abaddon, text: 'VEJA ESSA: Star Wars foi escrito após George Lucas ler Jung.
-Darth Vader, por exemplo, é o exemplo perfeito da Sombra projetada.
-Ou seja, sem Jung, não teríamos a Força!', source: 'Fonte: [O Poder do Mito (Joseph Campbell)]' },
+          txt:'Um problema pequeno começa a crescer por negligência de outro. Você:', 
+          hint: { img: imgLinks.abaddon, text: 'VEJA ESSA: Star Wars foi escrito após George Lucas ler Jung. Darth Vader, por exemplo, é o exemplo perfeito da Sombra projetada. Ou seja, sem Jung, não teríamos a Força!', source: 'Fonte: [O Poder do Mito (Joseph Campbell)]' },
           opts:[
             { t:'Assume antes de virar novela e resolve sem culpá-lo.', pts:{ governante:2, heroi:1 } },
             { t:'Fala com ele sobre o erro e pede que o solucione.', pts:{ sabio:2, governante:1 } },
-            { t:'Conversa a sós com ele e oferece 
-ajuda.', pts:{ cuidador:2, amante:1 } },
+            { t:'Conversa a sós com ele e oferece ajuda.', pts:{ cuidador:2, amante:1 } },
             { t:'Deixa que o responsável se vire porque não é seu.', pts:{ comum:2, inocente:1 } },
             { t:'Fala perto de todos quem é o culpado.', pts:{ divertido:2, rebelde:1 } }
           ]
         },
         { 
-          txt:'No fim do dia, alguém conta 
-uma fofoca absurda. Você:', 
-          hint: { img: imgLinks.eva, text: 'IMPORTANTE: Na TCC, dá-se o nome de individuação ao processo que busca gerenciar todos os nossos arquétipos.
-Assim, podemos agir com autonomia e com base na realidade.', source: 'Fonte: [Terapia Cognitiva: Teoria e Prática]' },
+          txt:'No fim do dia, alguém conta uma fofoca absurda. Você:', 
+          hint: { img: imgLinks.eva, text: 'IMPORTANTE: Na TCC, dá-se o nome de individuação ao processo que busca gerenciar todos os nossos arquétipos. Assim, podemos agir com autonomia e com base na realidade.', source: 'Fonte: [Terapia Cognitiva: Teoria e Prática]' },
           opts:[
             { t:'Dá detalhes como se fosse programa do Porchat.', pts:{ divertido:2, amante:1 } },
             { t:'Pede que não lhe conram nada ruim sobre outros.', pts:{ sabio:2, explorador:1 } },
-            { t:'Diz à pessoa que não é certo o comportamento.', 
-pts:{ heroi:2, governante:1 } },
+            { t:'Diz à pessoa que não é certo o comportamento.', pts:{ heroi:2, governante:1 } },
             { t:'Mostra desinteresse porque não gosta daquilo.', pts:{ comum:2, rebelde:1 } },
             { t:'Pede à pessoa que reflita sobre o que disse.', pts:{ amante:2, inocente:1 } }
           ]
         }
       ];
+
       const coverScreen = document.getElementById('screen-cover');
       const intro = document.getElementById('screen-intro');
       const explanationScreen = document.getElementById('screen-explanation');
@@ -641,17 +640,16 @@ pts:{ heroi:2, governante:1 } },
       const alertActions = document.getElementById('alertActions');
       const alertNo = document.getElementById('alertNo');
       const alertYes = document.getElementById('alertYes');
+
       let currentQ = 0, answers = [], selectedArch = archetypes[0].id;
       let canAdvanceExplanation = false;
       let typingInterval;
-      const scoreBoard = {};
-      archetypes.forEach(a => scoreBoard[a.id] = 0);
-      function resetScores(){ archetypes.forEach(a => scoreBoard[a.id] = 0);
-      }
-      function showScreen(el){ [coverScreen, intro, explanationScreen, quiz, loading, result].forEach(s => s.classList.remove('active')); el.classList.add('active');
-      }
+      const scoreBoard = {}; archetypes.forEach(a => scoreBoard[a.id] = 0);
+      function resetScores(){ archetypes.forEach(a => scoreBoard[a.id] = 0); }
+      function showScreen(el){ [coverScreen, intro, explanationScreen, quiz, loading, result].forEach(s => s.classList.remove('active')); el.classList.add('active'); }
 
       const expFullText = "Se fosse no contexto bancário, os arquétipos de Jung funcionariam como instituições em que todas estão sob normas de um sistema financeiro global (inconsciente coletivo).\nOu seja, bancos (pessoas) diferentes operando com as mesmas \"regras de mercado\" universais, sem se falarem. E são esses modelos herdados que organizam como cada um funciona.";
+
       function startExplanation() {
         canAdvanceExplanation = false;
         expTextEl.textContent = '';
@@ -673,6 +671,7 @@ pts:{ heroi:2, governante:1 } },
           i++;
           if (i >= chars.length) { clearInterval(typingInterval); finishExplanation(); }
         }, interval);
+
         setTimeout(() => {
           clearInterval(typingInterval);
           if(!canAdvanceExplanation) finishExplanation();
@@ -698,12 +697,14 @@ pts:{ heroi:2, governante:1 } },
 
       playIcon.addEventListener('click', (e) => { if(canAdvanceExplanation) { e.stopPropagation(); goToQuiz(); } });
       explanationScreen.addEventListener('click', (e) => { if(canAdvanceExplanation && e.target !== skipBtn) goToQuiz(); });
+
       skipBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const today = new Date().toLocaleDateString();
         if (localStorage.getItem('arquetipo_skip') === today) goToQuiz();
         else alertModal.classList.add('show');
       });
+
       alertNo.addEventListener('click', () => alertModal.classList.remove('show'));
       alertYes.addEventListener('click', () => {
         alertMsg.textContent = "Ok. Mas só após esse minuto que preparei pra treinar a calma.";
@@ -712,29 +713,28 @@ pts:{ heroi:2, governante:1 } },
         let timeLeft = 60;
         const timerInt = setInterval(() => {
             timeLeft--;
-            let sec = timeLeft 
-< 10 ? "0" + timeLeft : timeLeft;
+            let sec = timeLeft < 10 ? "0" + timeLeft : timeLeft;
             alertTimer.textContent = "0:" + sec;
             if(timeLeft <= 0) {
                 clearInterval(timerInt);
                 alertTimer.style.display = 'none';
                 alertMsg.textContent = "Agora pode continuar :)";
-       
-                 localStorage.setItem('arquetipo_skip', new Date().toLocaleDateString());
+                localStorage.setItem('arquetipo_skip', new Date().toLocaleDateString());
                 setTimeout(() => {
                     alertModal.classList.remove('show');
                     alertMsg.textContent = "Vai mesmo perder as informações bacanas do jogo, pulando o texto?";
-                   
-     alertActions.style.display = 'flex';
+                    alertActions.style.display = 'flex';
                     goToQuiz();
-}, 1500);
+                }, 1500);
             }
         }, 1000);
       });
+
       coverScreen.addEventListener('click', () => {
         coverScreen.classList.add('fade-out');
         setTimeout(() => { showScreen(intro); }, 500);
       });
+
       function buildCarousel(){
         const repeated = [...archetypes, ...archetypes, ...archetypes];
         repeated.forEach((item, index) => {
@@ -744,7 +744,6 @@ pts:{ heroi:2, governante:1 } },
           btn.dataset.real = String(index % archetypes.length);
           btn.innerHTML = `<img src="${item.thumb}" style="width:100%;height:100%;border-radius:8px;object-fit:cover;display:block;">`;
           btn.addEventListener('click', () => {
-          
             const realIndex = index % archetypes.length;
             selectArchetype(realIndex);
             const baseIndex = archetypes.length + realIndex;
@@ -782,6 +781,7 @@ pts:{ heroi:2, governante:1 } },
         progressFill.style.width = ((currentQ + 1) / questions.length * 100) + '%';
         optionsBox.innerHTML = '';
         hintCard.style.display = 'none';
+
         q.opts.forEach((opt, idx) => {
           const b = document.createElement('button');
           b.type = 'button';
@@ -789,7 +789,6 @@ pts:{ heroi:2, governante:1 } },
           b.textContent = opt.t;
           b.onclick = () => {
             if(answers[currentQ] !== undefined) return;
-          
             answers[currentQ] = idx;
             [...optionsBox.children].forEach(x => x.classList.remove('sel'));
             b.classList.add('sel');
@@ -814,8 +813,7 @@ pts:{ heroi:2, governante:1 } },
           Object.entries(opt.pts).forEach(([key, val]) => scoreBoard[key] += val);
         });
       }
-      function getTop(){ return [...archetypes].sort((a,b) => scoreBoard[b.id] - scoreBoard[a.id]);
-      }
+      function getTop(){ return [...archetypes].sort((a,b) => scoreBoard[b.id] - scoreBoard[a.id]); }
       
       function finishQuiz(){
         computeScores();
@@ -828,15 +826,15 @@ pts:{ heroi:2, governante:1 } },
 
         if (top.id === chosen.id && (scoreBoard[top.id] - (ranked[1] ? scoreBoard[ranked[1].id] : 0)) >= 3) {
           resultTitle.textContent = 'Que pessoa coerente, hein';
-          resultText.textContent = 'Pelas suas respostas, você se enxerga bem próximo do que é.\nÉ como planejar orçamento, gastar só o que ganha e ainda guardar uma parte.';
+          resultText.textContent = 'Pelas suas respostas, você se enxerga bem próximo do que é. É como planejar orçamento, gastar só o que ganha e ainda guardar uma parte.';
           resultImgV2.src = 'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Bowie-dica.jpg';
         } else if (top.id === chosen.id || diff <= 2) {
           resultTitle.textContent = 'Mais ou menos, tá bom?';
-          resultText.textContent = 'Pelas suas respostas, digamos que não é bem como você pensa. O que não significa algo ruim.\nDigamos que é como um desconto na compra em que o frete é o mesmo valor.';
+          resultText.textContent = 'Pelas suas respostas, digamos que não é bem como você pensa. O que não significa algo ruim. Digamos que é como um desconto na compra em que o frete é o mesmo valor.';
           resultImgV2.src = 'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/Eva-dica.jpg';
         } else {
           resultTitle.textContent = 'Eita, banqueiro não é bancário';
-          resultText.textContent = 'Pelas suas respostas, dá pra dizer que é o mesmo que acessar o cheque especial e chamar de crédito.\nPra Jung, o perfil mais alinhado com você seria ' + top.name + '.';
+          resultText.textContent = 'Pelas suas respostas, dá pra dizer que é o mesmo que acessar o cheque especial e chamar de crédito. Pra Jung, o perfil mais alinhado com você seria ' + top.name + '.';
           resultImgV2.src = 'https://psiangelooliveira.com.br/wp-content/uploads/2026/05/abaddon-dica.jpg';
           idealBtn.style.display = 'block';
           modalTitle.textContent = 'Arquétipo ideal: ' + top.name;
